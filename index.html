@@ -1243,7 +1243,7 @@
       <textarea id="life-question" placeholder="예) 몇 세에 일이 트일까요?" data-i18n-placeholder="questionPlaceholder"></textarea>
     </div>
 
-    <button class="btn" id="life-next" data-i18n="castHexagram">괘를 짓습니다</button>
+    <button class="btn" id="life-next" data-i18n="castHexagram" disabled>괘를 짓습니다</button>
   </section>
 
   <!-- ════════════ 의식 (터치 모션) ════════════ -->
@@ -5014,7 +5014,17 @@ bindLifeNumeric(lBirthY, 4, lBirthM);
 bindLifeNumeric(lBirthM, 2, lBirthD);
 bindLifeNumeric(lBirthD, 2, null);
 
-document.getElementById('life-next').addEventListener('click', () => {
+const lifeQuestionInput = document.getElementById('life-question');
+const lifeNextButton = document.getElementById('life-next');
+
+function updateLifeNextState() {
+  lifeNextButton.disabled = !lifeQuestionInput.value.trim();
+}
+
+lifeQuestionInput.addEventListener('input', updateLifeNextState);
+updateLifeNextState();
+
+lifeNextButton.addEventListener('click', () => {
   const b = readLifeBirth();
   if (!b) { alert(t('invalidBirth')); return; }
   const ages = calcAges(b.str);
